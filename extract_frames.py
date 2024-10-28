@@ -6,8 +6,12 @@ def FrameCapture(video_path, output_folder):
 
     # error opening video
     if not video.isOpened():
-        print("Error could not open video: f{video_path}")
+        print(f"Error could not open video: {video_path}")
         return
+    
+    # create output folder if it does not exist
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
     
     # keeping track of how many frames
     frameCount = 0
@@ -23,7 +27,7 @@ def FrameCapture(video_path, output_folder):
 
         # saving frame as png
         cv2.imwrite(frame_fileName, frame)
-        # print(f"Saved Frame: {frame_fileName}")
+        print(f"Saved Frame: {frame_fileName}")
 
         # go onto the next frame!
         success, frame = video.read()
@@ -52,12 +56,15 @@ def Process_Video(data_folder, output_folder):
                 relative_path = os.path.relpath(root,data_folder)
                 video_output_folder = os.path.join(output_folder, relative_path, os.path.splitext(file)[0])
 
+                # to see if videos are being processed
+                print(f"Processing video: {video_path}")
+
                 # Extract frames from the video
                 FrameCapture(video_path, video_output_folder)
 
-                # Increment counter and stop after processing 10 videos
+                # Increment counter and stop after processing 50 videos
                 counter += 1
-                if counter == 10:
+                if counter == 500:
                     return
     
 

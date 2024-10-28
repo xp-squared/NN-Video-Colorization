@@ -14,3 +14,8 @@ Activate VENV: venv\Scripts\activate
 If a user wants to try and use my program and copy the dependencies they can do pip install -r requirements.txt
 
 Remember I can run from top right corner but also can put these in vscode terminal: python dataset_utils.py
+
+
+Problems occuring that happened when we left off:
+- Can extract all the frames which is fantastic but I think we have too much data, maybe lessen the dataset by deleting some
+- Going to take up more space by converting the ground truth to gray scale
