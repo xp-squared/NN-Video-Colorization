@@ -6,20 +6,11 @@ excellent for frame consistency because the dataset contains vids across many ca
 
 We want to use a video dataset for frame coloring consistency
 
-To-Do List:
-1. Download and prepare the dataset
-2. Write code for extracting frames, turning them grayscale from these videos
-3. Build CNN model with pytorch
-4. Train CNN model with grayscale frames and compare with the original ground truth from these videos
-5. Reassemble colored frames into a video
-6. Attemp creating another NN for style transfer
-7. Train with fun patterns or art pieces
-8. Test on colorized videos we have done after we do our coloring
-9. Once again reassemble video
-
 Directory where project is located: C:\Users\b4igo\Desktop\CompVis\NN-Video-Colorization>
 
 We use virtual environment to make sure that these dependencies being used are specific to this project and not the system.
 Activate VENV: venv\Scripts\activate
 
 If a user wants to try and use my program and copy the dependencies they can do pip install -r requirements.txt
+
+Remember I can run from top right corner but also can put these in vscode terminal: python dataset_utils.py
