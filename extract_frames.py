@@ -1,24 +1,19 @@
 import cv2 # OpenCV to process the videos
 import os # to handle the directory and file operations
 
-# def Process_Video():
-
-# for this small example below, this our test to make sure we can extract frames from the first video
-def TestFrameCapture(path, output_folder):
-    video = cv2.VideoCapture(path)
+def FrameCapture(video_path, output_folder): 
+    video = cv2.VideoCapture(video_path)
 
     # error opening video
     if not video.isOpened():
-        print("Error could not open video: {path}")
+        print("Error could not open video: f{video_path}")
         return
     
     # keeping track of how many frames
     frameCount = 0
 
-    # checks whether frames were extracted
-    success = 1
-
     # read first frame from video
+    # will check if success was success by the loop continuing
     success, frame = video.read()
 
     # loop till no more frames
@@ -28,7 +23,7 @@ def TestFrameCapture(path, output_folder):
 
         # saving frame as png
         cv2.imwrite(frame_fileName, frame)
-        print(f"Saved Frame: {frame_fileName}")
+        # print(f"Saved Frame: {frame_fileName}")
 
         # go onto the next frame!
         success, frame = video.read()
@@ -38,6 +33,33 @@ def TestFrameCapture(path, output_folder):
     video.release()
 
 
+def Process_Video(data_folder, output_folder):
+    # we want to loop through every video folder in the data
+
+    # for the sake of testing we will only test for a few videos
+    # defining a counter for now this will be removed
+    counter = 0
+    for root, dirs, files in os.walk(data_folder):
+    # root is the current folder, we want to go into that folder
+    # print(root) will output something like: ./data/UCF-101\ApplyEyeMakeup
+    # print(files) will show [...] filled with each video for 1 topic,
+        for file in files:
+            if file.endswith(".avi"):
+                # get full video path for current file
+                video_path = os.path.join(root,file)
+
+                # now we want to create a corresponding output folder for that specific video
+                relative_path = os.path.relpath(root,data_folder)
+                video_output_folder = os.path.join(output_folder, relative_path, os.path.splitext(file)[0])
+
+                # Extract frames from the video
+                FrameCapture(video_path, video_output_folder)
+
+                # Increment counter and stop after processing 10 videos
+                counter += 1
+                if counter == 10:
+                    return
+    
 
 if __name__ == '__main__':
     # taking our dataset folder
@@ -46,10 +68,13 @@ if __name__ == '__main__':
     # where our extracted frames will be
     output_folder = './extracted_frames'
 
-    # test function example
-    # r is used so the \ are not recognized as escape characters
-    test_video = r'data\UCF-101\ApplyEyeMakeup\v_ApplyEyeMakeup_g01_c01.avi'
-    test_output_folder = './extracted_frames'
-    TestFrameCapture(test_video, test_output_folder)
 
-    # process_video(data_folder, output_folder, frame_rate = 1) # extract 1 frame per second
+    
+    # test function example !!!
+    # r is used so the \ are not recognized as escape characters
+    # test_video = r'data\UCF-101\ApplyEyeMakeup\v_ApplyEyeMakeup_g01_c01.avi'
+    # test_output_folder = './extracted_frames'
+    # TestFrameCapture(test_video, test_output_folder)
+    
+
+    Process_Video(data_folder, output_folder)
