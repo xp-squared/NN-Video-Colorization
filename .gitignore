@@ -1,0 +1,5 @@
+# ignore dataset user can add that themselves if they want to
+data/
+
+# ignore virtual environment
+venv/
