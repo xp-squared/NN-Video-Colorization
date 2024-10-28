@@ -3,3 +3,6 @@ data/
 
 # ignore virtual environment
 venv/
+
+# ignore extracted frames for now.
+extracted_frames
