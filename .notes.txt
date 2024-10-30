@@ -19,3 +19,17 @@ Remember I can run from top right corner but also can put these in vscode termin
 Problems occuring that happened when we left off:
 - Can extract all the frames which is fantastic but I think we have too much data, maybe lessen the dataset by deleting some
 - Going to take up more space by converting the ground truth to gray scale
+- In extract frames send that current frame to another function turning that frame gray and storing it in another folder
+
+I deleted some parts of the dataset to save space
+-BoxingPunchingBag
+-Fencing
+-HammerThrow
+-PlayingViolin
+-PlayingSitar
+-PlayingDhol
+-PlayingDaf
+-SkiJet
+-ShavingBeard
+-TaiChi
+-PlayingTable

@@ -23,14 +23,17 @@ def FrameCapture(video_path, output_folder):
     # loop till no more frames
     while success:
         # making filename for each frame
-        frame_fileName = os.path.join(output_folder, f"frame_{frameCount:05d}.png")
 
-        # saving frame as png
-        cv2.imwrite(frame_fileName, frame)
-        print(f"Saved Frame: {frame_fileName}")
+        # too many frames previously not enough change over the video, instead of 1 frame each time lets use each 10th frame of video
+        if (frameCount % 10 == 0): 
+            frame_fileName = os.path.join(output_folder, f"frame_{frameCount:05d}.png")
 
-        # go onto the next frame!
-        success, frame = video.read()
+            # saving frame as png
+            cv2.imwrite(frame_fileName, frame)
+            print(f"Saved Frame: {frame_fileName}")
+
+            # go onto the next frame!
+            success, frame = video.read()
         frameCount += 1
 
     # release video object after processing
@@ -42,7 +45,7 @@ def Process_Video(data_folder, output_folder):
 
     # for the sake of testing we will only test for a few videos
     # defining a counter for now this will be removed
-    counter = 0
+
     for root, dirs, files in os.walk(data_folder):
     # root is the current folder, we want to go into that folder
     # print(root) will output something like: ./data/UCF-101\ApplyEyeMakeup
@@ -62,10 +65,6 @@ def Process_Video(data_folder, output_folder):
                 # Extract frames from the video
                 FrameCapture(video_path, video_output_folder)
 
-                # Increment counter and stop after processing 50 videos
-                counter += 1
-                if counter == 500:
-                    return
     
 
 if __name__ == '__main__':
