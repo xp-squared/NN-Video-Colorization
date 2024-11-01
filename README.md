@@ -3,7 +3,7 @@ Neural network to colorize and use style transfer on grayscale images
 To-Do List:
 1. Download and prepare the dataset : DONE
 2. Write code for extracting frames : DONE  <br>
-2.1 turn frames grayscale : 
+2.1 turn frames grayscale : DONE
 3. Build CNN model with pytorch : 
 4. Train CNN model with grayscale frames and compare with the original ground truth from these videos : 
 5. Reassemble colored frames into a video : 
