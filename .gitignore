@@ -1,8 +1,11 @@
-# ignore dataset user can add that themselves if they want to
+# ignore dataset user can add that themselves if they want to.
 data/
 
-# ignore virtual environment
+# ignore virtual environment.
 venv/
 
-# ignore extracted frames for now.
-extracted_frames
+# ignore extracted frames.
+extracted_frames/
+
+# ignored grayscale frames.
+grayscale_extracted_frames/

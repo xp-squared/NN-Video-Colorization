@@ -33,3 +33,6 @@ I deleted some parts of the dataset to save space
 -ShavingBeard
 -TaiChi
 -PlayingTable
+
+
+Convert images to grayscale as well I believe we need to resize the images
