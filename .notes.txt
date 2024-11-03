@@ -34,5 +34,6 @@ I deleted some parts of the dataset to save space
 -TaiChi
 -PlayingTable
 
-
-Convert images to grayscale as well I believe we need to resize the images
+Training Set: This subset is used to train the model. It helps the model learn patterns from the data.
+Validation Set: This subset is used during training to evaluate the model's performance on unseen data. It helps in tuning hyperparameters and checking for overfitting.
+Testing Set: This set is used after the model is trained to assess its final performance. It's not used during the training process.

@@ -9,3 +9,6 @@ extracted_frames/
 
 # ignored grayscale frames.
 grayscale_extracted_frames/
+
+# ignored extracted dataset
+dataset/
