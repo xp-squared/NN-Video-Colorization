@@ -20,7 +20,7 @@ def split_dataset(input_color_folder,input_grayscale_folder,output_folder,split_
     # get list of files from color frames folder
     color_frames = os.listdir(input_color_folder)
 
-    # Get a list of all .png files from color frames folder and its subdirectories
+    # Get list of all .png files from color frames folder and its subdirectories
     color_frames = []
     for root, _, files in os.walk(input_color_folder):
         for file in files:
@@ -31,11 +31,11 @@ def split_dataset(input_color_folder,input_grayscale_folder,output_folder,split_
 
     random.shuffle(color_frames)
 
-    # Calculate the split index based on the given split ratio
+    # Calculate split index based on the given split ratio
     split_index = int(len(color_frames) * split_ratio)
-    # Split the files into training and validation sets
+    # split files into training and validation sets
     train_files = color_frames[:split_index]  # first 80% of the files
-    test_files = color_frames[split_index:]    # reamining files
+    test_files = color_frames[split_index:]    # remaining files
 
     # Function to create subdirectories and move files
     def move_files(files, color_folder, grayscale_folder, input_grayscale_folder):
