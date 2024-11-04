@@ -1,5 +1,6 @@
 import os
 import shutil # allows more file operations
+# shutil.move(src, dst): Moves the file or directory at src to dst.
 import random
 
 def split_dataset(input_color_folder,input_grayscale_folder,output_folder,split_ratio = 0.8):
@@ -18,7 +19,6 @@ def split_dataset(input_color_folder,input_grayscale_folder,output_folder,split_
 
     # get list of files from color frames folder
     color_frames = os.listdir(input_color_folder)
-    print(f"Total files in color folder before filtering: {len(color_frames)}")  # DEBUG
 
     # Get a list of all .png files from color frames folder and its subdirectories
     color_frames = []
@@ -29,8 +29,6 @@ def split_dataset(input_color_folder,input_grayscale_folder,output_folder,split_
                 relative_path = os.path.relpath(full_path, input_color_folder)
                 color_frames.append((full_path, relative_path))
 
-
-    print(f"Total color frames after filtering: {len(color_frames)}") # DEBUG
     random.shuffle(color_frames)
 
     # Calculate the split index based on the given split ratio
