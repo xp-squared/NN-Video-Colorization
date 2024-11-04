@@ -2,24 +2,12 @@ Dataset we will use
 - UCF-101 a large dataset of videos used for action recognition,
 excellent for frame consistency because the dataset contains vids across many categories
 
-- DAVIS Dataset, primarily used for segmentation but has high-quality annotated videos
-
-We want to use a video dataset for frame coloring consistency
-
-Directory where project is located: C:\Users\b4igo\Desktop\CompVis\NN-Video-Colorization>
+Directory where project is located: "C:\Users\b4igo\Desktop\CompVis\NN-Video-Colorization"
 
 We use virtual environment to make sure that these dependencies being used are specific to this project and not the system.
-Activate VENV: venv\Scripts\activate
+Activate VENV: venv\Scripts\activate, I activate in terminal for VS code
 
 If a user wants to try and use my program and copy the dependencies they can do pip install -r requirements.txt
-
-Remember I can run from top right corner but also can put these in vscode terminal: python dataset_utils.py
-
-
-Problems occuring that happened when we left off:
-- Can extract all the frames which is fantastic but I think we have too much data, maybe lessen the dataset by deleting some
-- Going to take up more space by converting the ground truth to gray scale
-- In extract frames send that current frame to another function turning that frame gray and storing it in another folder
 
 I deleted some parts of the dataset to save space
 -BoxingPunchingBag
@@ -34,6 +22,9 @@ I deleted some parts of the dataset to save space
 -TaiChi
 -PlayingTable
 
+Went 80/20 split on data
 Training Set: This subset is used to train the model. It helps the model learn patterns from the data.
-Validation Set: This subset is used during training to evaluate the model's performance on unseen data. It helps in tuning hyperparameters and checking for overfitting.
 Testing Set: This set is used after the model is trained to assess its final performance. It's not used during the training process.
+
+After training just test with those detroit images on reddit so we can just test that it is properly coloring an image first
+before trying to stitch together a whole video again
