@@ -39,28 +39,29 @@ def split_dataset(input_color_folder,input_grayscale_folder,output_folder,split_
     train_files = color_frames[:split_index]  # first 80% of the files
     test_files = color_frames[split_index:]    # reamining files
 
-    # moving training and test files
-    for file_path in train_files:
-        file_name = os.path.basename(file_path)
-        print(f"Moving training file: {file_name}")
-        shutil.move(file_path, train_color_folder)
-        # Construct the corresponding grayscale file path and move it
-        grayscale_file_path = os.path.join(input_grayscale_folder, file_name)
-        if os.path.exists(grayscale_file_path):
-            shutil.move(grayscale_file_path, train_grayscale_folder)
-        else:
-            print(f"Warning: Grayscale file for {file_name} not found.")
+    # Function to create subdirectories and move files
+    def move_files(files, color_folder, grayscale_folder, input_grayscale_folder):
+        for color_path, relative_path in files:
+            color_dest_path = os.path.join(color_folder, relative_path)
+            grayscale_src_path = os.path.join(input_grayscale_folder, relative_path)
+            grayscale_dest_path = os.path.join(grayscale_folder, relative_path)
 
-    for file_path in test_files:
-        file_name = os.path.basename(file_path)
-        print(f"Moving testing file: {file_name}")
-        shutil.move(file_path, test_color_folder)
-        # Construct the corresponding grayscale file path and move it
-        grayscale_file_path = os.path.join(input_grayscale_folder, file_name)
-        if os.path.exists(grayscale_file_path):
-            shutil.move(grayscale_file_path, test_grayscale_folder)
-        else:
-            print(f"Warning: Grayscale file for {file_name} not found.")
+            # Create subdirectories
+            os.makedirs(os.path.dirname(color_dest_path), exist_ok=True)
+            os.makedirs(os.path.dirname(grayscale_dest_path), exist_ok=True)
+
+            print(f"Moving color frame: {color_path} to {color_dest_path}")
+            shutil.move(color_path, color_dest_path)
+
+            if os.path.exists(grayscale_src_path):
+                print(f"Moving grayscale frame: {grayscale_src_path} to {grayscale_dest_path}")
+                shutil.move(grayscale_src_path, grayscale_dest_path)
+            else:
+                print(f"Warning: Grayscale file for {relative_path} not found.")
+
+    # Move the training and test files
+    move_files(train_files, train_color_folder, train_grayscale_folder, input_grayscale_folder)
+    move_files(test_files, test_color_folder, test_grayscale_folder, input_grayscale_folder)
 
     print("Number of training files: " + str(len(train_files)) + "\nNumber of testing files: " + str(len(test_files)))
 
