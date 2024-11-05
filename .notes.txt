@@ -28,3 +28,5 @@ Testing Set: This set is used after the model is trained to assess its final per
 
 After training just test with those detroit images on reddit so we can just test that it is properly coloring an image first
 before trying to stitch together a whole video again
+
+As well after doing data loader we need to add loss function and backward propagation, related to step 4 in geek4geek link

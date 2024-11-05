@@ -14,6 +14,11 @@ class VideoColorizationCNN(nn.module):
         # we are gonna use sequential to make it more readable : https://pytorch.org/docs/stable/generated/torch.nn.Sequential.html
         # sequential keeps passing output to the next line as input, it will go in order
 
+        # Encoder and Decoder: The encoder takes the input data and compresses it into a lower-dimensional representation called the 
+        # latent space. The decoder then reconstructs the input data from the latent space representation.
+
+        # ENCODER PART OF CODE
+        # extracts features from grayscale image
         # Convolutional layer 1
         self.layer1 = nn.Sequential(
             # first convolutional layer
@@ -72,6 +77,67 @@ class VideoColorizationCNN(nn.module):
             nn.MaxPool2d(kernel_size=2, stride=2)
         )
         # I think more than 3 layers would be overkill, 2 might even work fine but lets start with 3 for now
+
+        # DECODER PART
+        # https://bluetickconsultants.medium.com/image-and-video-colorization-using-deep-learning-and-opencv-eeec118b58e3
+        # upsamples extracted features to produce the AB color channels from LAB
+        # Remember L = lightness, A = green-red B = Yellow-Blue
+        # this will make it easier for us to adjust , we already have L as the grayscale image so we just need to adjust a and b
+        # ConvTranspose2d is deconvolution in pytorch
+        self.layer4 = nn.Sequential(
+            nn.ConvTranspose2d(
+                in_channels=256,  # takes 256 feature maps from encoder output
+                out_channels=128,  # reduce feature map
+                kernel_size=3,  # 3x3 kernel
+                stride=2, # stride of 2 reverse the downsampling effect, upsample the features by factor of 2
+                padding=1,  # adds padding
+                output_padding=1 # ensure dimensions are doubled accurately 
+            ),
+            nn.BatchNorm2d(128),
+            nn.ReLU()
+        )
+
+        self.layer5 = nn.Sequential(
+            nn.ConvTranspose2d(
+                in_channels=128,      # takes 128 feature maps from the previous layer
+                out_channels=64,      # reduce feature maps to 64
+                kernel_size=3,        
+                stride=2,             
+                padding=1,            
+                output_padding=1      
+            ),
+            nn.BatchNorm2d(64),
+            nn.ReLU()
+        )
+
+        self.layer6 = nn.Sequential(
+            nn.ConvTranspose2d(
+                in_channels=64,      # takes 64 feature maps from the previous layer
+                out_channels=32,      # reduce feature maps to 32
+                kernel_size=3,        
+                stride=2,             
+                padding=1,            
+                output_padding=1      
+            ),
+            nn.BatchNorm2d(32),
+            nn.ReLU()
+        )
+
+        # Final layer to produce AB color channels
+        self.final_layer = nn.Sequential(
+            nn.Conv2d(
+                in_channels=32,
+                out_channels=2,      # Outputs 2 channels for `ab` in LAB color space
+                kernel_size=3,
+                stride=1,
+                padding=1
+            ),
+            # activation function to map output between [-1,1]
+            # after normalization a and b will be mapped between [-1,1] so we will try to predict the color within the range
+            nn.Tanh()              
+        )
+
+
         
 
     def forward(self, x):
@@ -81,11 +147,22 @@ class VideoColorizationCNN(nn.module):
         #out = out.reshape(out.size(0), -1)
         #out = self.fc(out)
         #return out
-        x = self.layer1
-        x = self.layer2
-        x = self.layer3
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = self.layer3(x)
+        x = self.layer4(x)
+        x = self.layer5(x)
+        x = self.layer6(x)
+        x = self.final_layer(x)
         # ...
 
+
+# Initialize and print the model to check the architecture
+if __name__ == "__main__":
+    model = EncoderDecoderColorizationCNN()
+    print(model)
+
+    
 # Loss and optimizer, I am going to use the same one from CNN class example
 # Cross-entropy loss is a commonly used metric in machine learning, 
 # particularly for classification tasks, that measures the difference between 
