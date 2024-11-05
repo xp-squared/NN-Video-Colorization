@@ -3,11 +3,9 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torchvision
-import torchvision.transforms as transforms
-import torch.nn.functional as F
 
-class VideoColorizationCNN(nn.module):
+
+class VideoColorizationCNN(nn.Module):
     def __init__(self):
         super(VideoColorizationCNN, self).__init__() # calling constructor of parent class nn.module 
 
@@ -41,7 +39,7 @@ class VideoColorizationCNN(nn.module):
             # rectified linear unit (ReLU) activation function
             # We need activation functions to simulate real world data as it is not lienar, it has complex patterns it needs to learn
             # The ReLU function operates by outputting the input directly if it is positive; otherwise, it outputs zero.
-            nn.ReLu(),
+            nn.ReLU(),
 
             # pooling layer to keep the most significant features, as well reduces the spatial dimensions by half for the image
             # takes most important information (MAX)
@@ -154,20 +152,18 @@ class VideoColorizationCNN(nn.module):
         x = self.layer5(x)
         x = self.layer6(x)
         x = self.final_layer(x)
-        # ...
+        return x
 
 
 # Initialize and print the model to check the architecture
 if __name__ == "__main__":
-    model = EncoderDecoderColorizationCNN()
+    model = VideoColorizationCNN()
     print(model)
 
-    
+
 # Loss and optimizer, I am going to use the same one from CNN class example
-# Cross-entropy loss is a commonly used metric in machine learning, 
-# particularly for classification tasks, that measures the difference between 
-# the probability distribution predicted by a model and the true probability distribution of the data
-criterion = nn.CrossEntropyLoss()
+# Mean Squared Error
+criterion = nn.MSELoss()
 # maybe change LR later, better to keep it smaller for now
 optimizer = torch.optim.Adam(model.parameters(), lr=.001)
 
