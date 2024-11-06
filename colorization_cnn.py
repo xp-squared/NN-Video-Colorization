@@ -1,8 +1,6 @@
 # our CNN that we need to create and train
 # Example of CNN : https://www.geeksforgeeks.org/building-a-convolutional-neural-network-using-pytorch/ 
-import torch
 import torch.nn as nn
-import torch.optim as optim
 
 
 class VideoColorizationCNN(nn.Module):
@@ -81,7 +79,7 @@ class VideoColorizationCNN(nn.Module):
         # upsamples extracted features to produce the AB color channels from LAB
         # Remember L = lightness, A = green-red B = Yellow-Blue
         # this will make it easier for us to adjust , we already have L as the grayscale image so we just need to adjust a and b
-        # ConvTranspose2d is deconvolution in pytorch
+        # ConvTranspose2d is deconvolution in pytorch (somewhat)
         self.layer4 = nn.Sequential(
             nn.ConvTranspose2d(
                 in_channels=256,  # takes 256 feature maps from encoder output
@@ -136,8 +134,6 @@ class VideoColorizationCNN(nn.Module):
         )
 
 
-        
-
     def forward(self, x):
         # example of forward pass from previous assignment
         #out = self.layer1(x)
@@ -155,16 +151,8 @@ class VideoColorizationCNN(nn.Module):
         return x
 
 
-# Initialize and print the model to check the architecture
+# Initialize and print the model so we can see the architecture 
 if __name__ == "__main__":
     model = VideoColorizationCNN()
     print(model)
 
-
-# Loss and optimizer, I am going to use the same one from CNN class example
-# Mean Squared Error
-criterion = nn.MSELoss()
-# maybe change LR later, better to keep it smaller for now
-optimizer = torch.optim.Adam(model.parameters(), lr=.001)
-
-# step 4 on geeks for geeks is very important for backward propagation
