@@ -5,7 +5,7 @@ To-Do List:
 2. Write code for extracting frames : DONE  <br>
 3. turn frames grayscale and resize images : DONE <br>
 4. Organize dataset with training, validation, and testing sets with: DONE
-5. Build CNN model with pytorch : DONE
+5. Build CNN model with pytorch and build dataloader
 6. Train CNN model with grayscale frames and compare with the original ground truth from these videos : 
 7. Reassemble colored frames into a video : 
 8. Attemp creating another NN for style transfer : 

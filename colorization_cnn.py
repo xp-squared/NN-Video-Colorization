@@ -76,6 +76,9 @@ class VideoColorizationCNN(nn.Module):
 
         # DECODER PART
         # https://bluetickconsultants.medium.com/image-and-video-colorization-using-deep-learning-and-opencv-eeec118b58e3
+        # github from this project: https://github.com/bluetickconsultants/image_video_colorization/blob/main/TF%20.ipynb
+        # below is a good example of how Transpose2d works
+        # https://indico.cern.ch/event/996880/contributions/4188468/attachments/2193001/3706891/ChiakiYanagisawa_20210219_Conv2d_and_ConvTransposed2d.pdf
         # upsamples extracted features to produce the AB color channels from LAB
         # Remember L = lightness, A = green-red B = Yellow-Blue
         # this will make it easier for us to adjust , we already have L as the grayscale image so we just need to adjust a and b
@@ -130,6 +133,7 @@ class VideoColorizationCNN(nn.Module):
             ),
             # activation function to map output between [-1,1]
             # after normalization a and b will be mapped between [-1,1] so we will try to predict the color within the range
+            # a and b are between -128 and 127 so we need to normalize it later to [-1,1] 
             nn.Tanh()              
         )
 
