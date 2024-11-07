@@ -1,14 +1,9 @@
 Neural network to colorize and use style transfer on grayscale images
 
-To-Do List:
-1. Download and prepare the dataset : DONE
-2. Write code for extracting frames : DONE  <br>
-3. turn frames grayscale and resize images : DONE <br>
-4. Organize dataset with training, validation, and testing sets with: DONE
-5. Build CNN model with pytorch and build dataloader
-6. Train CNN model with grayscale frames and compare with the original ground truth from these videos : 
-7. Reassemble colored frames into a video : 
-8. Attemp creating another NN for style transfer : 
-9. Train with fun patterns or art pieces : 
-10. Test on colorized videos we have done after we do our coloring : 
-11. Once again reassemble video : 
+To Do:
+1. Instead of extracting data from videos, lets use a dataset instead (making our own dataloader is very hard) : 
+2. Train the model with dataset, maybe CIFAR-10 or ImageNET and we can load it with pytorch :
+3. Make it where we can colorize a single image that we give (user input?) : 
+4. Output color image into seprate folder? : 
+5. Extract all frames from very short video to start off with colorize each frame and reassemble video : 
+6. Work on style transfer : 
