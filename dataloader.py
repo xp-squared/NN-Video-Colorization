@@ -40,6 +40,11 @@ class VideoColorizationDataset(torch.utils.data.Dataset):
         # COLOR IMAGE BECOMES LAB_IMAGE
         LAB_image = cv2.cvtColor(colorImage_np, cv2.COLOR_RGB2LAB)
 
+        # https://www.kaggle.com/code/basu369victor/image-colorization-basic-implementation-with-cnn Really good example with tensorflow
+        # There are two techniques to generate colored image from its gray scaled form:- Turn the RGB image into LAB image, then separate the L value and ab value from the image and then train the model to predict the ab value.
+
+
+
 
         #######################################################################
         # Extract 'ab' channels and normalize to [-1, 1]
@@ -56,7 +61,7 @@ class VideoColorizationDataset(torch.utils.data.Dataset):
         ab_tensor = torch.from_numpy(ab.transpose((2, 0, 1))).float()  # Shape: [2, H, W]
 
         return L_tensor, ab_tensor
-        ########################################################################3
+        ########################################################################
 
     # returns length of the dataset
     def __len__(self):
@@ -64,7 +69,10 @@ class VideoColorizationDataset(torch.utils.data.Dataset):
 
 # for now batchsize will be 64 since we have a larger dataset
 # https://stackoverflow.com/questions/35050753/how-big-should-batch-size-and-number-of-epochs-be-when-fitting-a-model
+# actually creating the dataloader using the class we made
 def create_Dataloader(colorFolder,grayScaleFolder,batchsize, shuffle):
+    # creating our current dataset
     dataset = VideoColorizationDataset(colorFolder, grayScaleFolder)
-    dataloader = torch.utils.data.DataLoader(dataset, batchsize, shuffle=shuffle)
+    # use the original Dataloader class and creates one with our current dataset, we get to set the batchsize and if we want to shuffle the data
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=batchsize, shuffle=shuffle)
     return dataloader
