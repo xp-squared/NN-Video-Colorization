@@ -1,5 +1,5 @@
 # ignore dataset user can add that themselves if they want to.
-data/
+data_og/
 
 # ignore virtual environment.
 venv/
