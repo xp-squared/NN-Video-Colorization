@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from dataloader import create_Dataloader, VideoColorizationDataset
-from colorization_cnn import VideoColorizationCNN
+from colorization_cnn2 import VideoColorizationCNN
 
 # number of epochs to train CNN, we can adjust this later
 epochs = 10 # was 10

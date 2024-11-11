@@ -1,7 +1,7 @@
 # our CNN that we need to create and train
 # Example of CNN : https://www.geeksforgeeks.org/building-a-convolutional-neural-network-using-pytorch/ 
+import torch
 import torch.nn as nn
-
 
 class VideoColorizationCNN(nn.Module):
     def __init__(self):
@@ -16,7 +16,7 @@ class VideoColorizationCNN(nn.Module):
         # ENCODER PART OF CODE
         # extracts features from grayscale image
         # Convolutional layer 1
-        self.layer1 = nn.Sequential(
+        self.enc1 = nn.Sequential(
             # first convolutional layer
             # this layer will extract basic edges from the image
             nn.Conv2d(
@@ -46,7 +46,7 @@ class VideoColorizationCNN(nn.Module):
         
         # Convolutional layer 2
         # going deeper and extracting more complex features
-        self.layer2 = nn.Sequential(
+        self.enc2 = nn.Sequential(
             nn.Conv2d(
             in_channels=64,  # 64 feature maps from layer 1
             out_channels=128,  # 128 filters, produces 128 feature maps
@@ -60,7 +60,7 @@ class VideoColorizationCNN(nn.Module):
         )
 
         # Final convolutional layer
-        self.layer3 = nn.Sequential(
+        self.enc3 = nn.Sequential(
             nn.Conv2d(
             in_channels=128,  # 128 feature maps from layer 2
             out_channels=256,  # 256 filters, produces 256 feature maps
@@ -72,7 +72,14 @@ class VideoColorizationCNN(nn.Module):
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2)
         )
-        # I think more than 3 layers would be overkill, 2 might even work fine but lets start with 3 for now
+        
+        # adding another layer
+        self.enc4 = nn.Sequential(
+            nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(512),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
 
         # DECODER PART
         # https://bluetickconsultants.medium.com/image-and-video-colorization-using-deep-learning-and-opencv-eeec118b58e3
@@ -83,76 +90,69 @@ class VideoColorizationCNN(nn.Module):
         # Remember L = lightness, A = green-red B = Yellow-Blue
         # this will make it easier for us to adjust , we already have L as the grayscale image so we just need to adjust a and b
         # ConvTranspose2d is deconvolution in pytorch (somewhat)
-        self.layer4 = nn.Sequential(
-            nn.ConvTranspose2d(
-                in_channels=256,  # takes 256 feature maps from encoder output
-                out_channels=128,  # reduce feature map
-                kernel_size=3,  # 3x3 kernel
-                stride=2, # stride of 2 reverse the downsampling effect, upsample the features by factor of 2
-                padding=1,  # adds padding
-                output_padding=1 # ensure dimensions are doubled accurately 
-            ),
+
+        # RESEARCH SKIP CONNECTIONS MORE, THAT IS WHAT WE ARE USING
+        self.dec4 = nn.Sequential(
+            nn.ConvTranspose2d(512, 256, kernel_size=4, stride=2, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU()
+        )
+
+        self.dec3 = nn.Sequential(
+            nn.ConvTranspose2d(512, 128, kernel_size=4, stride=2, padding=1),  # 512 = 256 + 256 (skip)
             nn.BatchNorm2d(128),
             nn.ReLU()
         )
 
-        self.layer5 = nn.Sequential(
+        self.dec2 = nn.Sequential(
             nn.ConvTranspose2d(
-                in_channels=128,      # takes 128 feature maps from the previous layer
+                in_channels=256,      # takes 128 feature maps from the previous layer
                 out_channels=64,      # reduce feature maps to 64
-                kernel_size=3,        
+                kernel_size=4,        
                 stride=2,             
-                padding=1,            
-                output_padding=1      
+                padding=1,               
             ),
             nn.BatchNorm2d(64),
             nn.ReLU()
         )
 
-        self.layer6 = nn.Sequential(
-            nn.ConvTranspose2d(
-                in_channels=64,      # takes 64 feature maps from the previous layer
-                out_channels=32,      # reduce feature maps to 32
-                kernel_size=3,        
-                stride=2,             
-                padding=1,            
-                output_padding=1      
-            ),
-            nn.BatchNorm2d(32),
+        self.dec1 = nn.Sequential(
+            nn.ConvTranspose2d(128, 64, kernel_size=4, stride=2, padding=1),  # 128 = 64 + 64 (from skip)
+            nn.BatchNorm2d(64),
             nn.ReLU()
         )
 
         # Final layer to produce AB color channels
-        self.final_layer = nn.Sequential(
-            nn.Conv2d(
-                in_channels=32,
-                out_channels=2,      # Outputs 2 channels for `ab` in LAB color space
-                kernel_size=3,
-                stride=1,
-                padding=1
-            ),
-            # activation function to map output between [-1,1]
-            # after normalization a and b will be mapped between [-1,1] so we will try to predict the color within the range
-            # a and b are between -128 and 127 so we need to normalize it later to [-1,1] 
-            nn.Tanh()              
+        self.final = nn.Sequential(
+            nn.Conv2d(64, 32, kernel_size=3, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.Conv2d(32, 2, kernel_size=1),
+            nn.Tanh()  # Output range [-1, 1]
         )
 
 
     def forward(self, x):
-        # example of forward pass from previous assignment
-        #out = self.layer1(x)
-        #out = self.layer2(out)
-        #out = out.reshape(out.size(0), -1)
-        #out = self.fc(out)
-        #return out
-        x = self.layer1(x)
-        x = self.layer2(x)
-        x = self.layer3(x)
-        x = self.layer4(x)
-        x = self.layer5(x)
-        x = self.layer6(x)
-        x = self.final_layer(x)
-        return x
+        # Encoder
+        e1 = self.enc1(x)
+        e2 = self.enc2(e1)
+        e3 = self.enc3(e2)
+        e4 = self.enc4(e3)
+        
+        # Decoder with skip connections
+        d4 = self.dec4(e4)
+        d4_cat = torch.cat([d4, e3], dim=1)  # Skip connection from enc3
+        
+        d3 = self.dec3(d4_cat)
+        d3_cat = torch.cat([d3, e2], dim=1)  # Skip connection from enc2
+        
+        d2 = self.dec2(d3_cat)
+        d2_cat = torch.cat([d2, e1], dim=1)  # Skip connection from enc1
+        
+        d1 = self.dec1(d2_cat)
+        
+        out = self.final(d1)
+        return out
 
 
 # Initialize and print the model so we can see the architecture 

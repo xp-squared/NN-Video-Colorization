@@ -12,3 +12,9 @@ grayscale_extracted_frames/
 
 # ignored extracted dataset
 dataset/
+
+# ignore new data
+data/
+
+# ignore this for now
+older_files2
