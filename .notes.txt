@@ -1,32 +1,13 @@
-Dataset we will use
-- UCF-101 a large dataset of videos used for action recognition,
-excellent for frame consistency because the dataset contains vids across many categories
+Dataset used as of 11/30 https://www.kaggle.com/datasets/aayush9753/image-colorization-dataset
+Article https://medium.com/@geokam/building-an-image-colorization-neural-network-part-1-generative-models-and-autoencoders-d68f5769d484
+Github https://github.com/gkamtzir/cnn-image-colorization
 
-Directory where project is located: "C:\Users\b4igo\Desktop\CompVis\NN-Video-Colorization"
+Issues Encountered: 
+-Originally was using UCF-101 Data set where I had converted all of it to frames and as well grayscale frames, had issues with some
+videos having a black border around image so could mess with training
+-When creating the final colored video I would not be able to show the video because I was resizing off of original frame dimensions and not resized dimensions
 
-We use virtual environment to make sure that these dependencies being used are specific to this project and not the system.
-Activate VENV: venv\Scripts\activate, I activate in terminal for VS code
+Training: 
+-Og models trained thousands of epochs but steps were tiny
+-Newer models have much larger steps, trained for 500 epochs
 
-If a user wants to try and use my program and copy the dependencies they can do pip install -r requirements.txt
-
-I deleted some parts of the dataset to save space
--BoxingPunchingBag
--Fencing
--HammerThrow
--PlayingViolin
--PlayingSitar
--PlayingDhol
--PlayingDaf
--SkiJet
--ShavingBeard
--TaiChi
--PlayingTable
-
-Went 80/20 split on data
-Training Set: This subset is used to train the model. It helps the model learn patterns from the data.
-Testing Set: This set is used after the model is trained to assess its final performance. It's not used during the training process.
-
-After training just test with those detroit images on reddit so we can just test that it is properly coloring an image first
-before trying to stitch together a whole video again
-
-As well after doing data loader we need to add loss function and backward propagation, related to step 4 in geek4geek link

@@ -1,20 +1,16 @@
-# ignore dataset user can add that themselves if they want to.
-data_og/
-
 # ignore virtual environment.
 venv/
-
-# ignore extracted frames.
-extracted_frames/
-
-# ignored grayscale frames.
-grayscale_extracted_frames/
-
-# ignored extracted dataset
-dataset/
 
 # ignore new data
 data/
 
-# ignore this for now
-older_files2
+# original files I worked on
+older_files/
+
+__pycache__/
+
+ColoredVideo/
+
+CurrentColoredFrames/
+
+CurrentExtractedFrames/
