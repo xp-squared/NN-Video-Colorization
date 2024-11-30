@@ -1,4 +1,5 @@
 import os
+import torch
 from torch.utils.data import Dataset, DataLoader
 from torchvision.io import read_image, ImageReadMode
 from torch import from_numpy, save
@@ -8,6 +9,9 @@ import torch.optim.lr_scheduler as lr_scheduler
 import torch.nn as nn
 from colorization_models import Network1, Network3, Network6
 
+# using GPU from other computer to train
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu") ###
+print(f"Using device: {device}") ###
 
 def current_Network(choice):
     if choice == 1:
@@ -73,6 +77,10 @@ def train_model(color_dir, gray_dir=None, epochs=1000, learning_rate=0.001, batc
     # create the network and change choice to use either network 1, 2, 3, 6, 7
     choice = 7
     cnn, modelpath = current_Network(choice) # not gonna use modelpath in this code so no worries
+
+    # moving the model to the device
+    cnn.to(device) ###
+
     criterion = nn.MSELoss() # using mean squared error loss, we measure the predicted color vals with the ground truth to get the loss
     optimizer = optim.Adam(cnn.parameters(), lr=learning_rate)
 
@@ -84,8 +92,8 @@ def train_model(color_dir, gray_dir=None, epochs=1000, learning_rate=0.001, batc
         epoch_running_loss = 0
         for i, data in enumerate(train_data_loader, 0):
             gray, color = data
-            gray = gray.float()
-            color = color.float()
+            gray = gray.float().to(device)    # Move gray images to device ###
+            color = color.float().to(device)  # Move color images to device ### 
 
             outputs = cnn(gray)
 
