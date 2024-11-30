@@ -56,10 +56,9 @@ def reassemble_color_video(coloredVideoFolder, inputColoredFrames, ogVideo):
     print(f"Video saved to {outputVidPath}")
     
 
-
 #####################################################################################################
 def color_frames(image_path, framecount, outputFolder):
-    choice = 1 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TO CHANGE NEURAL NETWORK CHOICE
+    choice = 6 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TO CHANGE NEURAL NETWORK CHOICE
     cnn, model_file = current_Network(choice)
     cnn.load_state_dict(torch.load(model_file, weights_only=True))
     cnn.eval()
@@ -92,6 +91,8 @@ def color_frames(image_path, framecount, outputFolder):
     colorized_lab = torch.cat((gray_image, output_ab), dim=0).permute(1, 2, 0).numpy()  # Shape: [H, W, 3]
 
     # Convert LAB to RGB
+    #colorized_rgb = lab2rgb(colorized_lab) ###############
+    colorized_lab = np.clip(colorized_lab, 0, 100)  # L is typically 0-100, AB can be outside this range
     colorized_rgb = lab2rgb(colorized_lab)
 
     # Convert back to BGR for OpenCV saving
@@ -145,7 +146,7 @@ if __name__ == '__main__':
     # folder where our test videos will be
     # catVid_1_1000_1020
     # catVid_1_1339_1349
-    video_path = 'TestVideos/Driving.mp4'
+    video_path = 'TestVideos/City.mp4'
 
     # folder that will hold the temporarily extracted frames
     # as we color them we will save the frame to its grayscale version

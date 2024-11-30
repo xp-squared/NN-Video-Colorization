@@ -64,14 +64,14 @@ class ImageDataset(Dataset):
 
 
 # Training function, followed gkamtzir once again but branched off on my own design, just want to credit him for inspiration
-def train_model(color_dir, gray_dir=None, epochs=500, learning_rate=0.001, batch_size=128):
+def train_model(color_dir, gray_dir=None, epochs=1000, learning_rate=0.001, batch_size=128):
 
     # loading the dataset and creating a dataloader based on the loaded dataset, we determine our batch size being 32 and we shuffle the data to train
     training_data = ImageDataset(color_dir=color_dir, gray_dir=gray_dir)
     train_data_loader = DataLoader(training_data, batch_size=batch_size, shuffle=True)
 
     # create the network and change choice to use either network 1, 2, 3, 6, 7
-    choice = 2 
+    choice = 7
     cnn, modelpath = current_Network(choice) # not gonna use modelpath in this code so no worries
     criterion = nn.MSELoss() # using mean squared error loss, we measure the predicted color vals with the ground truth to get the loss
     optimizer = optim.Adam(cnn.parameters(), lr=learning_rate)
@@ -114,7 +114,7 @@ def train_model(color_dir, gray_dir=None, epochs=500, learning_rate=0.001, batch
 if __name__ == '__main__':
     color_dir = './data/dataset/train_color'  # Replace with your color images directory
     gray_dir = None  # Set to None if using LAB conversion within the dataset
-    epochs = 500
+    epochs = 1000
     learning_rate = 0.001
     batch_size = 128 # larger batch size so we can speed up the training process, was 32 but steps were too slow
 

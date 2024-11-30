@@ -81,6 +81,6 @@ def test_single_image(image_path):
 
 if __name__ == '__main__':
 
-    image_path = 'TestImages\Girl.jpg'  # Replace with the path to your image
+    image_path = 'TestImages\Tiger.jpg'  # Replace with the path to your image
 
     test_single_image(image_path)
