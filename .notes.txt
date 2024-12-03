@@ -6,8 +6,20 @@ Issues Encountered:
 -Originally was using UCF-101 Data set where I had converted all of it to frames and as well grayscale frames, had issues with some
 videos having a black border around image so could mess with training
 -When creating the final colored video I would not be able to show the video because I was resizing off of original frame dimensions and not resized dimensions
+-Using 10000 images instead of 4 for our basic training, this made the process very slow but with using Cuda and dataloader with multiple "threads" (python processes)
+sped this process up, miniziming idle time
 
 Training: 
 -Og models trained thousands of epochs but steps were tiny
 -Newer models have much larger steps, trained for 500 epochs
 
+"the autoencoder will generate only 2 channels, a and b, considering that the third one, the L, will come from the input."
+
+Commenting
+models.py, DONE
+colorize_image/colorize_video
+CropVideo, DONE
+training, DONE
+
+ON OMEN: new network 1, 2500 epochs, 10 steps per epoch, 2 workers, 300 images, loss will be higher cos net1
+On ASUS: new netwrok 6, 1000 epochs, 5 steps, no workers, 150 imagesx

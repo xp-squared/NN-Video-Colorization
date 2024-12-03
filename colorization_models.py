@@ -4,6 +4,7 @@ from torch import cat
 
 
 # model 1 that I have created, a simple encoder and decoder architecture 
+# the input is a grayscale image which has 1 channel
 class Network1(nn.Module):
     def __init__(self):
         super().__init__()
@@ -23,11 +24,12 @@ class Network1(nn.Module):
             # making it easier for the network to learn effectively.
             # IMOW: Batch Normalization fine tines output of convolutional layers so that each batch of data has a normalized mean and variance
             # this helps the network learn quickly and efficiently, mean close to 0 and variance close to 1 across batch of data
-            nn.BatchNorm2d(32) # normalizes output of 32 layers
+            nn.BatchNorm2d(32) # normalizes output of 32 layers, making sure data has mean of 0 and std of 1
 
             # do relu in the forward part instead this time
         )
 
+        # increases feature maps from 32 to 64
         self.layer2 = nn.Sequential(
             nn.Conv2d(32, 64, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(64)
@@ -36,17 +38,37 @@ class Network1(nn.Module):
 
         # decoder layer
         self.layer3 = nn.Sequential(
+            # pytorchs version of deconvolution
             nn.ConvTranspose2d(64, 32, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(32)
         )
 
         self.layer4 = nn.Sequential(
+            # reduces feature maps from 32 to 2 representing the a and b color channels
             nn.ConvTranspose2d(32, 2, kernel_size=4, stride=2, padding=1)
         )
 
+        # data flow of network
+
+        # layer 1 
+        # input : (32, 1, 400, 400), 32 image batch, 1 channel which is grayscale, size 400 x 400
+        #  output: (32, 32, 200, 200), 32 image batch still, 32 feature maps, reduce sized 200x200
+
+        # layer 2:
+        # input : (32, 32, 200, 200), 32 image batch , 32 feature maps, reduce sized 200x200
+        # output : (32, 64, 100, 100), 32 image batch, 64 feature maps, reduce sized 100x100
+
+        # layer 3: deconvolution (transpose)
+        # input : (32, 64, 100, 100), 32 image batch, 64 feature maps, sized 100x100
+        # output : (32, 32, 200, 200), 32 image batch, 32 feature maps, back sized at 200x200
+
+        # layer 4: 
+        # input : (32, 32, 200, 200), 32 image batch, 32 feature maps, back sized at 200x200 
+        # output : (32, 2, 400, 400), 32 image batch, 2 output channels representing a and b, sized 400x400
 
     def forward(self, x):
         # doing the activation function after each layer using RELU
+        # we extract features by doing this
         x = F.relu(self.layer1(x))
         x = F.relu(self.layer2(x))
 
@@ -56,6 +78,9 @@ class Network1(nn.Module):
 
 
 # more detailed model to test images with from gkamtzir on github https://github.com/gkamtzir, model 3 from his project
+# model that has skip connections
+# A skip connection, also known as a shortcut connection, is a link in a neural network that
+#  allows information to pass from one layer to another without going through all the layers in between
 class Network3(nn.Module):
     def __init__(self):
         """
@@ -98,6 +123,7 @@ class Network3(nn.Module):
     
 
 # more detailed model to test images with from gkamtzir on github https://github.com/gkamtzir, model 6 from his project
+# has 4 convolutional layers, 2 dilation layers, 4 deconvolution layers (transpose)
 class Network6(nn.Module):
     def __init__(self):
         """

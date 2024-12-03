@@ -9,8 +9,4 @@ older_files/
 
 __pycache__/
 
-ColoredVideo/
-
-CurrentColoredFrames/
-
-CurrentExtractedFrames/
+ColoredImages/
