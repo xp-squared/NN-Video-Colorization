@@ -4,9 +4,8 @@ venv/
 # ignore new data
 data/
 
-# original files I worked on
-older_files/
-
 __pycache__/
 
 ColoredImages/
+
+OlderFiles/

@@ -49,8 +49,8 @@ def extract_video(input_video, output_video, start_time, end_time):
 
 if __name__ == '__main__':
     # TestVideos/catvid_og_20Min.mp4
-    input_video = 'TestVideos\SteamboatWill.mp4'
-    output_video = 'TestVideos\Mickey.mp4'
+    input_video = 'TestVideos\SteamboatWill.mp4' ### 
+    output_video = 'TestVideos\Mickey.mp4' ### 
     # made the times I want to crop into seconds
     start_time = 5 * 60 + 0   # 13 minutes * 60 + 39 seconds = 819 seconds, 13 minutes 39 seconds
     end_time = 5 * 60 + 5     # 13 minutes * 60 + 49 seconds = 829 seconds, 13 minutes 49 seconds     
